@@ -98,52 +98,6 @@ namespace MyMQUtils
 	inline bool CalcMinMaxOfUVSelectedVertices(MQCDocument* doc, MQCoordinate& minVal, MQCoordinate& maxVal)
 	{
 		bool isFirstValue = true;
-#if 0
-		const int curoi = doc->GetCurrentObjectIndex();
-		const int curmi = doc->GetCurrentMaterialIndex();
-		if (curmi == -1)
-		{
-			return false;
-		}
-		MQCObject* obj = doc->GetObject(curoi);
-		if (obj == nullptr)
-		{
-			return false;
-		}
-		std::vector<MQCoordinate> uv(4);
-		const int faceCount = obj->GetFaceCount();
-		for (int j = 0; j < faceCount; ++j)
-		{
-			if (obj->GetFaceMaterial(j) != curmi)
-			{
-				continue;
-			}
-			const auto fpc = obj->GetFacePointCount(j);
-			if (fpc < 1)
-			{
-				continue;
-			}
-			uv.resize(fpc);
-			obj->GetFaceCoordinateArray(j, &uv[0]);
-			for (int k = 0; k < fpc; ++k)
-			{
-				if (doc->IsSelectUVVertex(curoi, j, k))
-				{
-					if (isFirstValue)
-					{
-						isFirstValue = false;
-						minVal = maxVal = uv[k];
-					}
-					else
-					{
-						UpdateMinOrMax(uv[k].u, minVal.u, maxVal.u);
-						UpdateMinOrMax(uv[k].v, minVal.v, maxVal.v);
-					}
-				}
-			}
-		}
-		return !isFirstValue;
-#else
 		return CommonUVScanLoopImpl<false>(doc,
 			[&](MQCoordinate& uv)
 		{
@@ -158,6 +112,5 @@ namespace MyMQUtils
 				UpdateMinOrMax(uv.v, minVal.v, maxVal.v);
 			}
 		}) && !isFirstValue;
-#endif
 	}
 }
