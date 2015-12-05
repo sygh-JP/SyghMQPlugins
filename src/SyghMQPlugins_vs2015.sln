@@ -2,15 +2,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUV2SVG", "SyghUV2SVG\SyghUV2SVG.vcxproj", "{E3DD74A1-6FC0-4F7E-9FD5-90E0751650EA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUV2SVG", "SyghMQUV2SVG\SyghUV2SVG.vcxproj", "{E3DD74A1-6FC0-4F7E-9FD5-90E0751650EA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVBBox", "SyghUVBBox\SyghUVBBox.vcxproj", "{4AE7617E-C9B3-4702-9B92-27AE99F46D72}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVBBox", "SyghMQUVBBox\SyghUVBBox.vcxproj", "{4AE7617E-C9B3-4702-9B92-27AE99F46D72}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVImplant", "SyghUVImplant\SyghUVImplant.vcxproj", "{63A44109-A094-4DFA-A431-B7BD8C72C20D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVImplant", "SyghMQUVImplant\SyghUVImplant.vcxproj", "{63A44109-A094-4DFA-A431-B7BD8C72C20D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVMatrix", "SyghUVMatrix\SyghUVMatrix.vcxproj", "{E940A598-1599-4C38-A2C1-5291622F32A2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVMatrix", "SyghMQUVMatrix\SyghUVMatrix.vcxproj", "{E940A598-1599-4C38-A2C1-5291622F32A2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVSelectUtil", "SyghUVSelectUtil\SyghUVSelectUtil.vcxproj", "{AEB25001-A1E8-4DD4-A420-E1DFC982FD5F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SyghUVSelectUtil", "SyghMQUVSelectUtil\SyghUVSelectUtil.vcxproj", "{AEB25001-A1E8-4DD4-A420-E1DFC982FD5F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_MyUtils", "_MyUtils", "{813014A1-6E76-4774-8B2A-67AF9FB0C29E}"
 	ProjectSection(SolutionItems) = preProject
