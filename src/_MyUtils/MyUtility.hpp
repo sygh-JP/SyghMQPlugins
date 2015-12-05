@@ -1,24 +1,14 @@
 ﻿#pragma once
 
 #if 0
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#include <cstdlib>
-#include <cstdio>
-#include <tchar.h>
-#include <string>
-#include <vector>
-#endif
-
 #ifdef UNICODE
 typedef std::wstring tstring;
 #else
 typedef std::string  tstring;
 #endif
+#endif
 
 #pragma comment(lib, "version.lib") // VerQueryValue, GetFileVersionInfo
-
-//using namespace std;
 
 
 namespace MyUtils

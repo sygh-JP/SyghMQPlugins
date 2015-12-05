@@ -47,9 +47,9 @@ void CMainDlg::OnOK()
 	{
 		MyPluginCoreFuncs::ImplantUV(this->m_pDocument, m_ddxcComboObjSrc.GetCurSel(), m_ddxcComboObjDst.GetCurSel());
 	}
-	catch (tstring& err)
+	catch (const CString& err)
 	{
-		AfxMessageBox(err.c_str(), MB_OK | MB_ICONERROR);
+		AfxMessageBox(err, MB_OK | MB_ICONERROR);
 		return;
 	}
 	catch (...)

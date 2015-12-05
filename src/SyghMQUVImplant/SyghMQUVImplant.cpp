@@ -1,4 +1,7 @@
-﻿
+﻿///////////////////////////////////////////////////////////////////////////////
+// Copyright (C) 2015 sygh.
+///////////////////////////////////////////////////////////////////////////////
+
 #include "stdafx.h"
 #include "SyghMQUVImplant.h"
 #include "MainDlg.h"
@@ -173,21 +176,21 @@ namespace MyPluginCoreFuncs
 
 		if (srcIndex == dstIndex)
 		{
-			throw tstring(_T("移植元・移植先が同じオブジェクトです。"));
+			throw CString(_T("移植元・移植先が同じオブジェクトです。"));
 		}
 
 		const int curmi = pDoc->GetCurrentMaterialIndex();
 		if (curmi == -1)
 		{
 			// カレントは未着色面＝マテリアルがひとつも無い
-			throw tstring(_T("ドキュメント内にマテリアルが存在しません。"));
+			throw CString(_T("ドキュメント内にマテリアルが存在しません。"));
 		}
 
 		auto* pCurObj = pDoc->GetObject(pDoc->GetCurrentObjectIndex());
 		if (pCurObj == nullptr)
 		{
 			// カレントオブジェクトが無効＝オブジェクトがひとつも無い
-			throw tstring(_T("ドキュメント内にオブジェクトが存在しません。"));
+			throw CString(_T("ドキュメント内にオブジェクトが存在しません。"));
 		}
 
 		auto* pSrcObj = pDoc->GetObject(srcIndex);
@@ -195,7 +198,7 @@ namespace MyPluginCoreFuncs
 		ASSERT(pSrcObj != nullptr);
 		ASSERT(pDstObj != nullptr);
 
-		const tstring notEqTopologyMsg(_T("移植元・移植先のオブジェクトのトポロジーが異なります。"));
+		const CString notEqTopologyMsg(_T("移植元・移植先のオブジェクトのトポロジーが異なります。"));
 
 		// トポロジーが全く同一であることを検証する。
 		const int srcFaceCount = pSrcObj->GetFaceCount();
@@ -210,34 +213,34 @@ namespace MyPluginCoreFuncs
 			const int srcMatid = pSrcObj->GetFaceMaterial(j);
 			if (srcMatid == -1)
 			{
-				throw tstring(_T("移植元オブジェクトの面にマテリアルが割り当てられていません。"));
+				throw CString(_T("移植元オブジェクトの面にマテリアルが割り当てられていません。"));
 			}
 			const int dstMatid = pDstObj->GetFaceMaterial(j);
 			if (dstMatid == -1)
 			{
-				throw tstring(_T("移植先オブジェクトの面にマテリアルが割り当てられていません。"));
+				throw CString(_T("移植先オブジェクトの面にマテリアルが割り当てられていません。"));
 			}
 
 			// 一応検証
 			auto* pSrcMat = pDoc->GetMaterial(srcMatid);
 			if (!pSrcMat)
 			{
-				throw tstring(_T("移植元オブジェクトの面のマテリアルがドキュメント内に存在しません。"));
+				throw CString(_T("移植元オブジェクトの面のマテリアルがドキュメント内に存在しません。"));
 			}
 			auto* pDstMat = pDoc->GetMaterial(dstMatid);
 			if (!pDstMat)
 			{
-				throw tstring(_T("移植先オブジェクトの面のマテリアルがドキュメント内に存在しません。"));
+				throw CString(_T("移植先オブジェクトの面のマテリアルがドキュメント内に存在しません。"));
 			}
 
 			// 移植元・移植先でマテリアルが異なっていても構わないが、UV マッピングされている必要がある
 			if (pSrcMat->GetMappingType() != MQMATERIAL_PROJECTION_UV)
 			{
-				throw tstring(_T("移植元オブジェクトの面のマッピング方式が UV ではありません。"));
+				throw CString(_T("移植元オブジェクトの面のマッピング方式が UV ではありません。"));
 			}
 			if (pDstMat->GetMappingType() != MQMATERIAL_PROJECTION_UV)
 			{
-				throw tstring(_T("移植先オブジェクトの面のマッピング方式が UV ではありません。"));
+				throw CString(_T("移植先オブジェクトの面のマッピング方式が UV ではありません。"));
 			}
 
 			// 面の頂点数の検証。

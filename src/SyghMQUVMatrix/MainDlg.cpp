@@ -81,9 +81,9 @@ void CMainDlg::OnOK()
 
 		MyPluginCoreFuncs::ApplyUVSRTMatrix(m_pDocument, m_matrixParam);
 	}
-	catch (tstring& err)
+	catch (const CString& err)
 	{
-		AfxMessageBox(err.c_str(), MB_OK | MB_ICONERROR);
+		AfxMessageBox(err, MB_OK | MB_ICONERROR);
 		return;
 	}
 	catch (...)

@@ -1,4 +1,7 @@
-﻿
+﻿///////////////////////////////////////////////////////////////////////////////
+// Copyright (C) 2015 sygh.
+///////////////////////////////////////////////////////////////////////////////
+
 #include "stdafx.h"
 #include "SyghMQUV2SVG.h"
 #include "MainDlg.h"
@@ -172,18 +175,16 @@ namespace MyPluginCoreFuncs
 
 		uv2DArray.clear();
 		const int curmi = pDoc->GetCurrentMaterialIndex();
-		if (-1 == curmi)
+		if (curmi == -1)
 		{
 			// カレントは未着色面＝マテリアルがひとつも無い
-			//return false;
-			throw tstring(_T("マテリアルが存在しません。"));
+			throw CString(_T("マテリアルが存在しません。"));
 		}
 		auto* pObj = pDoc->GetObject(pDoc->GetCurrentObjectIndex());
 		if (pObj == nullptr)
 		{
 			// カレントオブジェクトが無効＝オブジェクトがひとつも無い
-			//return false;
-			throw tstring(_T("オブジェクトが存在しません。"));
+			throw CString(_T("オブジェクトが存在しません。"));
 		}
 		const int faceCount = pObj->GetFaceCount();
 		for (int j = 0; j < faceCount; ++j)
@@ -223,74 +224,71 @@ namespace MyPluginCoreFuncs
 
 		FILE* fp = nullptr;
 		// BOM は付けておく。BOM をまともに扱えない時代遅れの処理系は無視。
-		if (0 == _tfopen_s(&fp, pFilename, _T("w, ccs=UTF-8")))
+		if (_tfopen_s(&fp, pFilename, _T("w, ccs=UTF-8")) != 0)
 		{
-			_ftprintf(fp,
-				_T("<?xml version=\"%s\" encoding=\"%s\" standalone=\"%s\"?>\n")
-				_T("<!DOCTYPE svg PUBLIC \"%s\"\n")
-				_T("\t")_T("\"%s\">\n")
-				_T("\n")
-				_T("<svg width=\"%ld\" height=\"%ld\" version=\"%s\"\n")
-				_T("\t")_T("viewBox=\"0 0 %ld %ld\"\n")
-				_T("\t")_T("xmlns=\"%s\">\n"),
-				_T("1.0"),
+			throw CString(_T("出力ファイルが書込モードで開けません。"));
+		}
+		_ASSERTE(fp != nullptr);
+
+		_ftprintf(fp,
+			_T("<?xml version=\"%s\" encoding=\"%s\" standalone=\"%s\"?>\n")
+			_T("<!DOCTYPE svg PUBLIC \"%s\"\n")
+			_T("\t")_T("\"%s\">\n")
+			_T("\n")
+			_T("<svg width=\"%ld\" height=\"%ld\" version=\"%s\"\n")
+			_T("\t")_T("viewBox=\"0 0 %ld %ld\"\n")
+			_T("\t")_T("xmlns=\"%s\">\n"),
+			_T("1.0"),
 #if 0
-				_T("shift-jis"), // SVG では Shift_JIS は無理みたい。
+			_T("shift-jis"), // SVG では Shift_JIS は無理みたい。
 #else
-				_T("UTF-8"),
+			_T("UTF-8"),
 #endif
-				_T("no"),
-				// HACK: DTD は時代遅れ。SVG 2.0 は2015年9月時点でもまだドラフトらしい。
-				_T("-//W3C//DTD SVG 1.1//EN"),
-				_T("http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"),
-				Option.CanvasSize.cx, Option.CanvasSize.cy,
-				_T("1.1"),
-				Option.CanvasSize.cx, Option.CanvasSize.cy,
-				_T("http://www.w3.org/2000/svg")
-				);
+			_T("no"),
+			// HACK: DTD は時代遅れ。SVG 2.0 は2015年9月時点でもまだドラフトらしい。
+			_T("-//W3C//DTD SVG 1.1//EN"),
+			_T("http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"),
+			Option.CanvasSize.cx, Option.CanvasSize.cy,
+			_T("1.1"),
+			Option.CanvasSize.cx, Option.CanvasSize.cy,
+			_T("http://www.w3.org/2000/svg")
+			);
 
-			_ftprintf(fp,
-				_T("\t")
-				_T("<g transform=\"translate(%ld,%ld) scale(%ld,%ld)\"")
-				_T(" style=\"fill:%s;stroke:%s;stroke-width:%f;stroke-linejoin:%s;\">\n"),
-				0L, 0L, Option.CanvasSize.cx, Option.CanvasSize.cy,
-				_T("none"), Option.ColorName.GetString(), Option.PenWidth, _T("round"));
+		_ftprintf(fp,
+			_T("\t")
+			_T("<g transform=\"translate(%ld,%ld) scale(%ld,%ld)\"")
+			_T(" style=\"fill:%s;stroke:%s;stroke-width:%f;stroke-linejoin:%s;\">\n"),
+			0L, 0L, Option.CanvasSize.cx, Option.CanvasSize.cy,
+			_T("none"), Option.ColorName.GetString(), Option.PenWidth, _T("round"));
 
-			// ガイド正方形（正規化された正方形）の出力
-			if (Option.IsGuideNeeded)
-			{
-				_ftprintf(fp, _T("\t\t")_T("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n"),
-					0, 0, 1, 1);
-			}
-
-			// 各面を polygon タグとして出力する。
-			for (const auto& uvArray : uv2DArray)
-			{
-				_ftprintf(fp, _T("\t\t")_T("<polygon points=\""));
-
-				const auto uvCount = uvArray.size();
-				for (size_t j = 0; j < uvCount; ++j)
-				{
-					// 頂点 UV を出力
-					_ftprintf(fp, _T("%f,%f"), uvArray[j].u, uvArray[j].v);
-					if (j + 1 != uvCount)
-					{
-						_ftprintf(fp, _T(" "));
-					}
-				}
-				_ftprintf(fp, _T("\" />\n"));
-			}
-			_ftprintf(fp, _T("\t")_T("</g>\n"));
-			_ftprintf(fp, _T("</svg>\n"));
-
-			fclose(fp);
-			//return true;
-			return;
-		}
-		else
+		// ガイド正方形（正規化された正方形）の出力。
+		if (Option.IsGuideNeeded)
 		{
-			//return false;
-			throw tstring(_T("出力ファイルが書込モードで開けません。"));
+			_ftprintf(fp, _T("\t\t")_T("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n"),
+				0, 0, 1, 1);
 		}
+
+		// 各面を polygon タグとして出力する。
+		for (const auto& uvArray : uv2DArray)
+		{
+			_ftprintf(fp, _T("\t\t")_T("<polygon points=\""));
+
+			const auto uvCount = uvArray.size();
+			for (size_t j = 0; j < uvCount; ++j)
+			{
+				// 頂点 UV を出力。
+				_ftprintf(fp, _T("%f,%f"), uvArray[j].u, uvArray[j].v);
+				if (j + 1 != uvCount)
+				{
+					_ftprintf(fp, _T(" "));
+				}
+			}
+			_ftprintf(fp, _T("\" />\n"));
+		}
+		_ftprintf(fp, _T("\t")_T("</g>\n"));
+		_ftprintf(fp, _T("</svg>\n"));
+
+		fclose(fp);
+		fp = nullptr;
 	}
 }
