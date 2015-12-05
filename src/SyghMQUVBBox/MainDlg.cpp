@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SyghUVBBox.h"
+#include "SyghMQUVBBox.h"
 #include "MainDlg.h"
 #include "../_MyUtils/MyMQUtils.hpp"
 

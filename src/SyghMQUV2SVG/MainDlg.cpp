@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SyghUV2SVG.h"
+#include "SyghMQUV2SVG.h"
 #include "MainDlg.h"
 
 

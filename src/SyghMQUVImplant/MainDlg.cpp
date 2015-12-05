@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "SyghUVImplant.h"
+#include "SyghMQUVImplant.h"
 #include "MainDlg.h"
 
 
