@@ -146,20 +146,19 @@ namespace MyUtils
 			return false;
 		}
 		LPVOID pItem = nullptr;
-		UINT itemsize = 0;
-		// 言語は一つしかないという前提のもとで
-		if (!::VerQueryValue(&buf[0], _T("\\VarFileInfo\\Translation"), &pItem, &itemsize))
+		UINT itemSize = 0;
+		// 言語は1つしかないという前提のもとで。
+		if (!::VerQueryValue(&buf[0], _T("\\VarFileInfo\\Translation"), &pItem, &itemSize))
 		{
 			return false;
 		}
-		TCHAR pVerStr[256] = {};
-		TCHAR pTemp[512] = {};
-		const auto langInfo = *(static_cast<LPDWORD>(pItem));
-		// 言語に応じた文字列テーブルから取得
-		_stprintf_s(pVerStr, _T("\\StringFileInfo\\%04X%04X\\"),
+		const auto langInfo = *(static_cast<const DWORD*>(pItem));
+		CString strSubBlockBase;
+		// 言語に応じた文字列テーブルから取得。
+		strSubBlockBase.Format(_T("\\StringFileInfo\\%04X%04X\\"),
 			LOWORD(langInfo), HIWORD(langInfo));
 
-		LPCTSTR ppVerLabels[] =
+		LPCTSTR ppInLabels[] =
 		{
 			_T("Comments"),
 			_T("CompanyName"),
@@ -175,7 +174,7 @@ namespace MyUtils
 			_T("SpecialBuild"),
 			nullptr // Sentinel
 		};
-		CString* ppVerInfos[] =
+		CString* ppOutStrings[] =
 		{
 			&this->Comments,
 			&this->CompanyName,
@@ -189,18 +188,21 @@ namespace MyUtils
 			&this->ProductName,
 			&this->ProductVersion,
 			&this->SpecialBuild,
+			nullptr // Sentinel
 		};
+		static_assert(ARRAYSIZE(ppInLabels) == ARRAYSIZE(ppOutStrings), "Not same size!!");
 
-		for (int i = 0; ppVerLabels[i]; ++i)
+		CString strSubBlock;
+		for (int i = 0; ppInLabels[i]; ++i)
 		{
-			_stprintf_s(pTemp, _T("%s%s"), pVerStr, ppVerLabels[i]);
-			if (::VerQueryValue(&buf[0], pTemp, &pItem, &itemsize))
+			strSubBlock = strSubBlockBase + ppInLabels[i];
+			if (::VerQueryValue(&buf[0], strSubBlock, &pItem, &itemSize))
 			{
-				(*ppVerInfos[i]) = static_cast<LPTSTR>(pItem);
+				(*ppOutStrings[i]) = static_cast<LPCTSTR>(pItem);
 			}
 			else
 			{
-				ppVerInfos[i]->Empty();
+				ppOutStrings[i]->Empty();
 			}
 		}
 		return true;
