@@ -51,5 +51,5 @@ public:
 
 namespace MyPluginCoreFuncs
 {
-	extern bool ApplyUVSRTMatrix(MQCDocument* doc, const SRTMatrixParam& Param);
+	extern bool ApplyUVSRTMatrix(MQCDocument* doc, const SRTMatrixParam& inParam);
 }

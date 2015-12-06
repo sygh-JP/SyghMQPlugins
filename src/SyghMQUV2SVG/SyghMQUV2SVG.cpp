@@ -214,7 +214,7 @@ namespace MyPluginCoreFuncs
 	}
 
 	// 指定したファイルパスに SVG 出力。
-	void SaveSVG(LPCTSTR pFilename, const TCoord2DArray& uv2DArray, const SVGOption& Option)
+	void SaveSVG(LPCTSTR pFilename, const TCoord2DArray& uv2DArray, const SVGOption& inOption)
 	{
 		// 簡単な XML を出力するだけなので、MSXML などは使わない。
 
@@ -223,7 +223,12 @@ namespace MyPluginCoreFuncs
 		// 表示状態の属性も付加できるはず。
 
 		FILE* fp = nullptr;
-		// BOM は付けておく。BOM をまともに扱えない時代遅れの処理系は無視。
+		// SVG では Shift_JIS は無理らしい。UTF-8 を使用する。
+		// .NET と違い、MSVC CRT では BOM なしの UTF-8 を直接出力できない。
+		// ASCII のみのテキストであればそのまま BOM なし UTF-8 と同義だが、
+		// マルチバイトのオブジェクト名・マテリアル名をグループ名に使うことを見据えて、
+		// あえて BOM は付けておく。BOM をまともに扱えないツールはサポートしない。
+		// そのほか、DTD はいかにも時代遅れな感じだが、SVG 2.0 は2015年9月時点でもまだドラフトらしい。
 		if (_tfopen_s(&fp, pFilename, _T("w, ccs=UTF-8")) != 0)
 		{
 			throw CString(_T("出力ファイルが書込モードで開けません。"));
@@ -239,18 +244,13 @@ namespace MyPluginCoreFuncs
 			_T("\t")_T("viewBox=\"0 0 %ld %ld\"\n")
 			_T("\t")_T("xmlns=\"%s\">\n"),
 			_T("1.0"),
-#if 0
-			_T("shift-jis"), // SVG では Shift_JIS は無理みたい。
-#else
 			_T("UTF-8"),
-#endif
 			_T("no"),
-			// HACK: DTD は時代遅れ。SVG 2.0 は2015年9月時点でもまだドラフトらしい。
 			_T("-//W3C//DTD SVG 1.1//EN"),
 			_T("http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"),
-			Option.CanvasSize.cx, Option.CanvasSize.cy,
+			inOption.CanvasSize.cx, inOption.CanvasSize.cy,
 			_T("1.1"),
-			Option.CanvasSize.cx, Option.CanvasSize.cy,
+			inOption.CanvasSize.cx, inOption.CanvasSize.cy,
 			_T("http://www.w3.org/2000/svg")
 			);
 
@@ -258,11 +258,11 @@ namespace MyPluginCoreFuncs
 			_T("\t")
 			_T("<g transform=\"translate(%ld,%ld) scale(%ld,%ld)\"")
 			_T(" style=\"fill:%s;stroke:%s;stroke-width:%f;stroke-linejoin:%s;\">\n"),
-			0L, 0L, Option.CanvasSize.cx, Option.CanvasSize.cy,
-			_T("none"), Option.ColorName.GetString(), Option.PenWidth, _T("round"));
+			0L, 0L, inOption.CanvasSize.cx, inOption.CanvasSize.cy,
+			_T("none"), inOption.ColorName.GetString(), inOption.PenWidth, _T("round"));
 
 		// ガイド正方形（正規化された正方形）の出力。
-		if (Option.IsGuideNeeded)
+		if (inOption.IsGuideNeeded)
 		{
 			_ftprintf(fp, _T("\t\t")_T("<rect x=\"%d\" y=\"%d\" width=\"%d\" height=\"%d\" />\n"),
 				0, 0, 1, 1);

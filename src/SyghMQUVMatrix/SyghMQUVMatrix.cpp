@@ -183,17 +183,17 @@ namespace
 namespace MyPluginCoreFuncs
 {
 
-	bool ApplyUVSRTMatrix(MQCDocument* doc, const SRTMatrixParam& Param)
+	bool ApplyUVSRTMatrix(MQCDocument* doc, const SRTMatrixParam& inParam)
 	{
 		MQCoordinate delta;
 		float cost, sint;
-		CalcCoefs(delta, cost, sint, Param);
+		CalcCoefs(delta, cost, sint, inParam);
 
 		return MyMQUtils::CommonUVScanLoopImpl<true>(doc,
 			[&](MQCoordinate& uv)
 		{
-			const float tempU = uv.u * Param.Scale.u * cost - uv.v * Param.Scale.v * sint + delta.u;
-			const float tempV = uv.u * Param.Scale.u * sint + uv.v * Param.Scale.v * cost + delta.v;
+			const float tempU = uv.u * inParam.Scale.u * cost - uv.v * inParam.Scale.v * sint + delta.u;
+			const float tempV = uv.u * inParam.Scale.u * sint + uv.v * inParam.Scale.v * cost + delta.v;
 			uv = MQCoordinate(tempU, tempV);
 		});
 	}

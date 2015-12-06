@@ -46,7 +46,7 @@ public:
 namespace MyPluginCoreFuncs
 {
 	extern void BuildUVList(MQCDocument* pDoc, TCoord2DArray& uv2DArray);
-	extern void SaveSVG(LPCTSTR pFilename, const TCoord2DArray& uv2DArray, const SVGOption& Option);
+	extern void SaveSVG(LPCTSTR pFilename, const TCoord2DArray& uv2DArray, const SVGOption& inOption);
 }
 
 // MFC 標準 DLL では自動的かつ暗黙的に DllMain() が実装される。
