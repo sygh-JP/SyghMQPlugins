@@ -179,6 +179,16 @@ void CMainDlg::OnBnClickedButtonSetClipboard()
 		return;
 	}
 
+	// 無印 VC 2015 (MFC 14.0) にはおかしなバグがある模様。 
+	// UpdateData(true) を呼び出すと、特定の float/double 型 DDV 変数の数値が「5」になってしまう。
+	// どうやら CRT のバグ起因らしい。
+	// Update 1 以降でバグ修正されるかもしれないが、
+	// VC 2015 の CRT には他にもバグがあるので（例えば putwchar で非 ASCII 文字が正常に出力できないとか）、
+	// UWP アプリや DirectX 12 アプリをどうしても開発したいなどの目的がないかぎり、
+	// 当面は VC 2013 より前の処理系を使ったほうがよさそう。
+	// ちなみに Visual C++ 2015 では[構成プロパティ]→[リンカー]→[デバッグ]→[デバッグ情報の生成]の設定に互換性のない仕様変更が加わっている模様。
+	// MSBuild もしくは IDE 側のバグかもしれない。プラットフォーム ツールセットを 2013 に戻す場合は要注意。
+
 	const auto strTemp = MyUtils::ConvertArrayToString<float>(
 	{
 		m_ddvScalingCenterU,
