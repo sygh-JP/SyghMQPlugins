@@ -177,27 +177,39 @@ namespace MyPluginCoreFuncs
 		const int curmi = pDoc->GetCurrentMaterialIndex();
 		if (curmi == -1)
 		{
-			// カレントは未着色面＝マテリアルがひとつも無い
+			// カレントマテリアルが無効＝マテリアルがひとつも無い。すなわちすべてが未着色面。
 			throw CString(_T("マテリアルが存在しません。"));
 		}
-		auto* pObj = pDoc->GetObject(pDoc->GetCurrentObjectIndex());
-		if (pObj == nullptr)
+		auto* pCurObj = pDoc->GetObject(pDoc->GetCurrentObjectIndex());
+		if (pCurObj == nullptr)
 		{
-			// カレントオブジェクトが無効＝オブジェクトがひとつも無い
+			// カレントオブジェクトが無効＝オブジェクトがひとつも無い。
 			throw CString(_T("オブジェクトが存在しません。"));
 		}
-		const int faceCount = pObj->GetFaceCount();
+		// 一応検証。
+		auto* pCurMat = pDoc->GetMaterial(curmi);
+		if (!pCurMat)
+		{
+			throw CString(_T("カレントマテリアルがドキュメント内に存在しません。"));
+		}
+		// UV マッピングされている必要がある。
+		if (pCurMat->GetMappingType() != MQMATERIAL_PROJECTION_UV)
+		{
+			throw CString(_T("カレントマテリアルのマッピング方式が UV ではありません。"));
+		}
+
+		const int faceCount = pCurObj->GetFaceCount();
 		for (int j = 0; j < faceCount; ++j)
 		{
-			// カレントマテリアルでない場合、処理をスキップ
-			if (pObj->GetFaceMaterial(j) != curmi)
+			// カレントマテリアルでない場合、処理をスキップ。
+			if (pCurObj->GetFaceMaterial(j) != curmi)
 			{
 				continue;
 			}
 			// 三角形でも四角形でもない場合、処理をスキップ。つまり線分は無視。
 			// HACK: Metasequoia 4 では多角形面がサポートされるようになったため、5 以上が返ってくることがありえる。
 			// 多角形にも対応するかどうかは TBD。
-			const auto fpc = pObj->GetFacePointCount(j);
+			const auto fpc = pCurObj->GetFacePointCount(j);
 #if 0
 			if (fpc != 3 && fpc != 4)
 #else
@@ -207,7 +219,7 @@ namespace MyPluginCoreFuncs
 				continue;
 			}
 			TCoordArray uvArray(fpc);
-			pObj->GetFaceCoordinateArray(j, &uvArray[0]);
+			pCurObj->GetFaceCoordinateArray(j, &uvArray[0]);
 			uv2DArray.push_back(uvArray);
 		}
 		//return true;

@@ -43,7 +43,7 @@ namespace MyMQUtils
 		const int currentMatIndex = doc->GetCurrentMaterialIndex();
 		if (currentMatIndex == -1)
 		{
-			// カレントは未着色面。
+			// カレントマテリアルが無効＝マテリアルがひとつも無い。すなわちすべてが未着色面。
 			return false;
 		}
 		auto* obj = doc->GetObject(currentObjIndex);

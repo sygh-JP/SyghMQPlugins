@@ -117,7 +117,7 @@ void CMainDlg::OnBnClickedButtonSvgFilePathRef()
 
 namespace
 {
-	void MakeSolidBitmap(CWnd* pWnd, CBitmap& bmp, COLORREF color, int width, int height)
+	void MakeSolidBitmap(CWnd* pWnd, CBitmap& bmp, int width, int height, COLORREF color)
 	{
 		// MFC は Win32 API の薄いラッパーでしかないので、Borland の VCL に比べてかなり分かりづらい。
 
@@ -170,7 +170,7 @@ void CMainDlg::SetupCmbExLineColor()
 	for (auto& scPair : m_svgColors)
 	{
 		CBitmap bmp;
-		MakeSolidBitmap(this, bmp, scPair.second, 16, 16);
+		MakeSolidBitmap(this, bmp, 16, 16, scPair.second);
 		m_imageList.Add(&bmp, COLORREF());
 	}
 
@@ -219,6 +219,21 @@ BOOL CMainDlg::OnInitDialog()
 	// TODO:  ここに初期化を追加してください
 
 	ASSERT(this->m_pDocument != nullptr);
+
+	const int objCount = m_pDocument->GetObjectCount();
+	if (objCount <= 0)
+	{
+		AfxMessageBox(_T("ドキュメント内のオブジェクト数が 0 以下です。UV 出力できません。"), MB_OK | MB_ICONWARNING);
+		this->OnCancel();
+		return true;
+	}
+	const int matCount = m_pDocument->GetMaterialCount();
+	if (matCount <= 0)
+	{
+		AfxMessageBox(_T("ドキュメント内のマテリアル数が 0 以下です。UV 出力できません。"), MB_OK | MB_ICONWARNING);
+		this->OnCancel();
+		return true;
+	}
 
 	this->SetupCmbExLineColor();
 

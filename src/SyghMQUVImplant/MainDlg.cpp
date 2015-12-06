@@ -72,7 +72,14 @@ BOOL CMainDlg::OnInitDialog()
 	const int objCount = m_pDocument->GetObjectCount();
 	if (objCount <= 1)
 	{
-		AfxMessageBox(_T("ドキュメント内のオブジェクト数が1以下です。UV 移植できません。"), MB_OK | MB_ICONWARNING);
+		AfxMessageBox(_T("ドキュメント内のオブジェクト数が 1 以下です。UV 移植できません。"), MB_OK | MB_ICONWARNING);
+		this->OnCancel();
+		return true;
+	}
+	const int matCount = m_pDocument->GetMaterialCount();
+	if (matCount <= 0)
+	{
+		AfxMessageBox(_T("ドキュメント内のマテリアル数が 0 以下です。UV 移植できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();
 		return true;
 	}

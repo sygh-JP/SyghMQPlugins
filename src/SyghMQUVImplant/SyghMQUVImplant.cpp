@@ -182,14 +182,14 @@ namespace MyPluginCoreFuncs
 		const int curmi = pDoc->GetCurrentMaterialIndex();
 		if (curmi == -1)
 		{
-			// カレントは未着色面＝マテリアルがひとつも無い
+			// カレントマテリアルが無効＝マテリアルがひとつも無い。すなわちすべてが未着色面。
 			throw CString(_T("ドキュメント内にマテリアルが存在しません。"));
 		}
 
 		auto* pCurObj = pDoc->GetObject(pDoc->GetCurrentObjectIndex());
 		if (pCurObj == nullptr)
 		{
-			// カレントオブジェクトが無効＝オブジェクトがひとつも無い
+			// カレントオブジェクトが無効＝オブジェクトがひとつも無い。
 			throw CString(_T("ドキュメント内にオブジェクトが存在しません。"));
 		}
 
@@ -221,7 +221,7 @@ namespace MyPluginCoreFuncs
 				throw CString(_T("移植先オブジェクトの面にマテリアルが割り当てられていません。"));
 			}
 
-			// 一応検証
+			// 一応検証。
 			auto* pSrcMat = pDoc->GetMaterial(srcMatid);
 			if (!pSrcMat)
 			{
@@ -233,7 +233,7 @@ namespace MyPluginCoreFuncs
 				throw CString(_T("移植先オブジェクトの面のマテリアルがドキュメント内に存在しません。"));
 			}
 
-			// 移植元・移植先でマテリアルが異なっていても構わないが、UV マッピングされている必要がある
+			// 移植元・移植先でマテリアルが異なっていても構わないが、UV マッピングされている必要がある。
 			if (pSrcMat->GetMappingType() != MQMATERIAL_PROJECTION_UV)
 			{
 				throw CString(_T("移植元オブジェクトの面のマッピング方式が UV ではありません。"));
@@ -253,6 +253,8 @@ namespace MyPluginCoreFuncs
 			}
 		}
 
+		// チェック後、改めてループを回す。
+
 		//MQCoordinate uvArray[4];
 		std::vector<MQCoordinate> uvArray(4);
 		for (int j = 0; j < srcFaceCount; ++j)
@@ -269,6 +271,7 @@ namespace MyPluginCoreFuncs
 			{
 				continue;
 			}
+			uvArray.resize(srcfpc);
 
 			// UV の移植。
 			pSrcObj->GetFaceCoordinateArray(j, &uvArray[0]);
