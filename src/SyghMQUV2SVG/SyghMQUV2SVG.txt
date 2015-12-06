@@ -4,14 +4,16 @@ UV to SVG
 SyghMQUV2SVG.dll（※）
 取扱説明書
 
-Copyright (C) 2008-2015, sygh.
+Copyright (C) 2008-2015 sygh.
 ///////////////////////////////////////////////////////////////////////////////
 
 
 【種別】
-3DCG ポリゴンモデリングソフト Metasequoia 3.1.6 および 4.5.2 対応の
+3DCG ポリゴンモデリングソフト Metasequoia 3.1.6 および 4.5.3 対応の
 オブジェクトプラグイン。
 プラグイン SDK は 2.4.9c 準拠ですが、3/4で動作確認しています。
+ただし、OS サポートは日本語版 Windows 7 以降のみとなります。
+また、ユーザーインターフェイスは日本語版のみの提供となります。
 
 Metasequoia 公式サイト：
 http://www.metaseq.net/jp/
@@ -20,6 +22,11 @@ http://www.metaseq.net/jp/
 http://sygh.hatenadiary.jp/
 プラグインソースコード公式管理サイト：
 https://github.com/sygh-JP/SyghMQPlugins
+
+※ KB975929 が適用されている Windows Vista であれば動作するかもしれませんが、
+Vista 以前は動作保証外となります。
+https://www.microsoft.com/ja-jp/download/details.aspx?id=5572
+https://www.microsoft.com/ja-jp/download/details.aspx?id=24941
 
 
 【機能】
@@ -39,6 +46,8 @@ Metasequoia をインストールしたフォルダーの下の
 「Plugins/Object」フォルダーに、本プラグイン DLL ファイル（※）を配置します。
 または、Metasequoia メニューの[ヘルプ]→[プラグインについて]からダイアログを開き、
 [インストール]ボタンで本プラグイン DLL ファイル（※）を選びます。
+32bit 版 Metasequoia の場合は Win32 フォルダー配下の DLL を、
+64bit 版 Metasequoia の場合は x64 フォルダー配下の DLL を配置するようにしてください。
 
 
 【使い方】
@@ -62,7 +71,7 @@ Metasequoia をインストールしたフォルダーの下の
 
 【更新履歴】
 Ver.1.0.0    2008-02-20  (SDK 2.4.6)
-・VC9.0 (Win32 API) によるプロトタイプ。
+・VC 9.0 (Win32 API) によるプロトタイプ。
 ・ただし線の色の選択は未実装。黒のみ対応。
 
 Ver.1.1.0    2008-09-22  (SDK 2.4.6)
@@ -70,6 +79,6 @@ Ver.1.1.0    2008-09-22  (SDK 2.4.6)
 ・線の色の選択を実装（RGB, CMY, BK, W）。
 
 Ver.1.2.0    2015-12-05  (SDK 2.4.9c)
-・VC14.0 (MFC 14.0) に移行。
+・VC 14.0 (MFC 14.0) に移行。
 ・Metasequoia 4の多角形に対応。
 

@@ -4,14 +4,16 @@ UV Select Utility
 SyghMQUVSelectUtil.dll（※）
 取扱説明書
 
-Copyright (C) 2007-2015, sygh.
+Copyright (C) 2007-2015 sygh.
 ///////////////////////////////////////////////////////////////////////////////
 
 
 【種別】
-3DCG ポリゴンモデリングソフト Metasequoia 3.1.6 および 4.5.2 対応の
+3DCG ポリゴンモデリングソフト Metasequoia 3.1.6 および 4.5.3 対応の
 選択プラグイン。
 プラグイン SDK は 2.4.9c 準拠ですが、3/4で動作確認しています。
+ただし、OS サポートは日本語版 Windows 7 以降のみとなります。
+また、ユーザーインターフェイスは日本語版のみの提供となります。
 
 Metasequoia 公式サイト：
 http://www.metaseq.net/jp/
@@ -20,6 +22,11 @@ http://www.metaseq.net/jp/
 http://sygh.hatenadiary.jp/
 プラグインソースコード公式管理サイト：
 https://github.com/sygh-JP/SyghMQPlugins
+
+※ KB975929 が適用されている Windows Vista であれば動作するかもしれませんが、
+Vista 以前は動作保証外となります。
+https://www.microsoft.com/ja-jp/download/details.aspx?id=5572
+https://www.microsoft.com/ja-jp/download/details.aspx?id=24941
 
 
 【機能】
@@ -34,6 +41,8 @@ Metasequoia をインストールしたフォルダーの下の
 「Plugins/Select」フォルダーに、本プラグイン DLL ファイル（※）を配置します。
 または、Metasequoia メニューの[ヘルプ]→[プラグインについて]からダイアログを開き、
 [インストール]ボタンで本プラグイン DLL ファイル（※）を選びます。
+32bit 版 Metasequoia の場合は Win32 フォルダー配下の DLL を、
+64bit 版 Metasequoia の場合は x64 フォルダー配下の DLL を配置するようにしてください。
 
 
 【使い方】
@@ -62,9 +71,9 @@ UV 展開図上において、頂点が選択された状態で表示されま�
 
 【更新履歴】
 Ver.1.0.0    2007-02-10  (SDK 2.3.1)
-・VC7.1 (Win32 API) による初版の完成。
+・VC 7.1 (Win32 API) による初版の完成。
 
 Ver.1.1.0    2015-12-05  (SDK 2.4.9c)
-・VC14.0 (MFC 14.0) を使って書き直し。Unicode 対応。
+・VC 14.0 (MFC 14.0) を使って書き直し。Unicode 対応。
 ・Metasequoia 4の多角形には前バージョンですでに対応済み。
 
