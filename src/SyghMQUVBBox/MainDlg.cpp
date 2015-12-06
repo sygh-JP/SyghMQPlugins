@@ -49,7 +49,7 @@ void CMainDlg::OnOK()
 
 	ASSERT(this->m_pDocument != nullptr);
 
-	// ダイアログから DDXCtrl・DDValue へ設定
+	// ダイアログ上の情報を使って DDValue を更新。
 	if (!this->UpdateData(true))
 	{
 		// 確定しない。
@@ -96,7 +96,7 @@ BOOL CMainDlg::OnInitDialog()
 	m_ddvRightBottomU = m_originalBBoxMax.u;
 	m_ddvRightBottomV = m_originalBBoxMax.v;
 
-	// DDXCtrl・DDValue からダイアログへ設定
+	// DDValue を使ってダイアログ上の情報を更新。
 	this->UpdateData(false);
 
 	TRACE(_T("Plugin-DLL dialog initialization finished.\n"));
@@ -130,7 +130,7 @@ void CMainDlg::OnBnClickedButtonGetClipboard()
 	m_ddvRightBottomU = paramArray[2];
 	m_ddvRightBottomV = paramArray[3];
 
-	// DDXCtrl・DDValue からダイアログへ設定
+	// DDValue を使ってダイアログ上の情報を更新。
 	this->UpdateData(false);
 }
 
@@ -139,7 +139,7 @@ void CMainDlg::OnBnClickedButtonSetClipboard()
 {
 	// TODO: ここにコントロール通知ハンドラー コードを追加します。
 
-	// ダイアログから DDXCtrl・DDValue へ設定
+	// ダイアログ上の情報を使って DDValue を更新。
 	if (!this->UpdateData(true))
 	{
 		// 確定しない。

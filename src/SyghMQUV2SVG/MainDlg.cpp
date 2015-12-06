@@ -51,7 +51,7 @@ void CMainDlg::OnOK()
 
 	ASSERT(this->m_pDocument != nullptr);
 
-	// ダイアログから DDXCtrl・DDValue へ設定
+	// ダイアログ上の情報を使って DDValue を更新。
 	if (!this->UpdateData(true))
 	{
 		// 確定しない。
@@ -67,7 +67,7 @@ void CMainDlg::OnOK()
 	try
 	{
 		TCoord2DArray uv2DArray;
-		// UV 解析
+		// UV 解析。
 		MyPluginCoreFuncs::BuildUVList(this->m_pDocument, uv2DArray);
 
 		CString colorName = DefaultSvgColorName; // 万が一選択されていない場合、デフォルト色を設定。
@@ -81,7 +81,7 @@ void CMainDlg::OnOK()
 
 		const SVGOption option{ m_ddxcSpinWidth.GetPos32(), m_ddxcSpinHeight.GetPos32(), 0.5f, !!m_ddvOutputsGuide, colorName };
 
-		// SVG 出力
+		// SVG 出力。
 		MyPluginCoreFuncs::SaveSVG(m_ddvOutputSvgFilePath, uv2DArray, option);
 	}
 	catch (const CString& err)
@@ -109,9 +109,9 @@ void CMainDlg::OnBnClickedButtonSvgFilePathRef()
 	{
 		// All Files (*.*) を選択したとき、ピリオド＋デフォルト拡張子が余計に追加されてしまう。
 		// HACK: CFileDialog を継承して OnTypeChange をオーバーライドしたクラスを作ったほうがいいかも。
-		m_ddvOutputSvgFilePath = saveDlg.GetPathName();
-		// DDXCtrl・DDValue からダイアログへ設定
-		this->UpdateData(false);
+		const auto strFilePath = saveDlg.GetPathName();
+		// DDV は経由せず、コントロールに直接テキストを設定。
+		this->SetDlgItemText(IDC_EDIT_SVG_FILE_PATH, strFilePath);
 	}
 }
 
@@ -165,7 +165,7 @@ void CMainDlg::SetupCmbExLineColor()
 	// Bitmap は ImageList に追加した後に破棄してかまわないが、
 	// ImageList は ComboBoxEx に設定した後に破棄してはいけない。
 
-	// イメージリストの作成
+	// イメージリストの作成。
 	m_imageList.Create(16, 16, ILC_COLOR24, static_cast<int>(m_svgColors.size()), 0);
 	for (auto& scPair : m_svgColors)
 	{
@@ -176,7 +176,7 @@ void CMainDlg::SetupCmbExLineColor()
 
 	m_ddxcComboExLineColor.SetImageList(&m_imageList);
 
-	// 拡張コンボボックスに項目を設定
+	// 拡張コンボボックスに項目を設定。
 	COMBOBOXEXITEM item = {};
 
 	item.mask = CBEIF_IMAGE | CBEIF_SELECTEDIMAGE | CBEIF_TEXT;
@@ -253,7 +253,7 @@ BOOL CMainDlg::OnInitDialog()
 	m_ddxcSpinHeight.SetPos32(256);
 	m_ddvOutputsGuide = true;
 
-	// DDXCtrl・DDValue からダイアログへ設定
+	// DDValue を使ってダイアログ上の情報を更新。
 	this->UpdateData(false);
 
 	TRACE(_T("Plugin-DLL dialog initialization finished.\n"));

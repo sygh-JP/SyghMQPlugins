@@ -40,7 +40,7 @@ void CMainDlg::OnOK()
 
 	ASSERT(this->m_pDocument != nullptr);
 
-	// ダイアログから DDXCtrl・DDValue へ設定
+	// ダイアログ上の情報を使って DDValue を更新。
 	this->UpdateData(true);
 
 	try

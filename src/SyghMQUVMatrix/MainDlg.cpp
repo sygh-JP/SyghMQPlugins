@@ -59,7 +59,7 @@ void CMainDlg::OnOK()
 
 	ASSERT(this->m_pDocument != nullptr);
 
-	// ダイアログから DDXCtrl・DDValue へ設定
+	// ダイアログ上の情報を使って DDValue を更新。
 	if (!this->UpdateData(true))
 	{
 		// 確定しない。
@@ -124,7 +124,7 @@ BOOL CMainDlg::OnInitDialog()
 	m_ddvTranslationU = m_matrixParam.Transl.u;
 	m_ddvTranslationV = m_matrixParam.Transl.v;
 
-	// DDXCtrl・DDValue からダイアログへ設定
+	// DDValue を使ってダイアログ上の情報を更新。
 	this->UpdateData(false);
 
 	TRACE(_T("Plugin-DLL dialog initialization finished.\n"));
@@ -163,7 +163,7 @@ void CMainDlg::OnBnClickedButtonGetClipboard()
 	m_ddvTranslationU = paramArray[7];
 	m_ddvTranslationV = paramArray[8];
 
-	// DDXCtrl・DDValue からダイアログへ設定
+	// DDValue を使ってダイアログ上の情報を更新。
 	this->UpdateData(false);
 }
 
@@ -172,7 +172,7 @@ void CMainDlg::OnBnClickedButtonSetClipboard()
 {
 	// TODO: ここにコントロール通知ハンドラー コードを追加します。
 
-	// ダイアログから DDXCtrl・DDValue へ設定
+	// ダイアログ上の情報を使って DDValue を更新。
 	if (!this->UpdateData(true))
 	{
 		// 確定しない。
