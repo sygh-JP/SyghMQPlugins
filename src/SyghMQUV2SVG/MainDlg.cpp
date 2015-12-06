@@ -227,9 +227,11 @@ BOOL CMainDlg::OnInitDialog()
 		this->OnCancel();
 		return true;
 	}
-	// SDK 2.4.9c の MQCDocument::GetMaterialCount() はバグがあるらしい？
+	// Metasequoia 4.5.3 の MQCDocument::GetMaterialCount() はバグがあるらしい？
 	// マテリアルが1つもない状態でも、1を返す。
 	// 代わりにカレントマテリアルの有無でチェックするしかなさそう。
+	// 本来は「カレントマテリアルが無効＝マテリアルが存在しない」とはかぎらないが、
+	// Metasequoia では一応それが成り立つ仕様になっているはず。
 	//const int matCount = m_pDocument->GetMaterialCount();
 	//AfxMessageBox(std::to_wstring(matCount).c_str());
 	const int currentMatIndex = m_pDocument->GetCurrentMaterialIndex();
@@ -242,9 +244,9 @@ BOOL CMainDlg::OnInitDialog()
 
 	this->SetupCmbExLineColor();
 
-	// CSpinButtonCtrl::SetRange32() の上下限値は、VC6 (MFC 4.2) では 16bit 仕様の SetRange() と同じく
+	// CSpinButtonCtrl::SetRange32() の上下限値は、VC 6.0 (MFC 4.2) では 16bit 仕様の SetRange() と同じく
 	// UD_MAXVAL, UD_MINVAL（それぞれ 0x7fff, -0x7fff）となっている。(commctrl.h)
-	// VC9 (MFC 9) では改善されている。MFC 7, 7.1, 8 は未確認。
+	// VC 9.0 (MFC 9.0) では改善されている。MFC 7.0, 7.1, 8.0 は未確認。
 	m_ddxcSpinWidth.SetRange32(1, 99999);
 	m_ddxcSpinHeight.SetRange32(1, 99999);
 	m_ddxcSpinWidth.SetPos32(256);

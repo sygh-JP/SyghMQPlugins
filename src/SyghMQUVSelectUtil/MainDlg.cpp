@@ -82,6 +82,8 @@ BOOL CMainDlg::OnInitDialog()
 
 	ASSERT(this->m_pDocument != nullptr);
 
+	// HACK: ドキュメント中にオブジェクトが含まれること、また UV マッピング設定のマテリアルが含まれることなどを事前確認するとよい。
+
 	// ラジオボタンの選択の初期化。
 	this->CheckDlgButton(IDC_RADIO_ADD_SELECT_FACE2UV, BST_CHECKED);
 
