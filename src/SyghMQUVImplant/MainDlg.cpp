@@ -92,8 +92,8 @@ BOOL CMainDlg::OnInitDialog()
 		const auto& addStringToCombo = [](CComboBox& combo, const CString& str)
 		{
 			const int errCode = combo.AddString(str);
-			//return errCode != CB_ERR && errCode != CB_ERRSPACE;
-			return errCode == CB_OKAY;
+			// 成功したときの戻り値はインデックスとなる。CB_OKAY ではない。
+			return errCode != CB_ERR && errCode != CB_ERRSPACE;
 		};
 		if (!addStringToCombo(m_ddxcComboObjSrc, strObjName))
 		{
