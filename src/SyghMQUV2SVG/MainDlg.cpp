@@ -227,10 +227,15 @@ BOOL CMainDlg::OnInitDialog()
 		this->OnCancel();
 		return true;
 	}
-	const int matCount = m_pDocument->GetMaterialCount();
-	if (matCount <= 0)
+	// SDK 2.4.9c の MQCDocument::GetMaterialCount() はバグがあるらしい？
+	// マテリアルが1つもない状態でも、1を返す。
+	// 代わりにカレントマテリアルの有無でチェックするしかなさそう。
+	//const int matCount = m_pDocument->GetMaterialCount();
+	//AfxMessageBox(std::to_wstring(matCount).c_str());
+	const int currentMatIndex = m_pDocument->GetCurrentMaterialIndex();
+	if (currentMatIndex == -1)
 	{
-		AfxMessageBox(_T("ドキュメント内のマテリアル数が 0 以下です。UV 出力できません。"), MB_OK | MB_ICONWARNING);
+		AfxMessageBox(_T("ドキュメント内にマテリアルが存在しません。UV 出力できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();
 		return true;
 	}

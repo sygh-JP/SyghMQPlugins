@@ -76,10 +76,10 @@ BOOL CMainDlg::OnInitDialog()
 		this->OnCancel();
 		return true;
 	}
-	const int matCount = m_pDocument->GetMaterialCount();
-	if (matCount <= 0)
+	const int currentMatIndex = m_pDocument->GetCurrentMaterialIndex();
+	if (currentMatIndex == -1)
 	{
-		AfxMessageBox(_T("ドキュメント内のマテリアル数が 0 以下です。UV 移植できません。"), MB_OK | MB_ICONWARNING);
+		AfxMessageBox(_T("ドキュメント内にマテリアルが存在しません。UV 移植できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();
 		return true;
 	}
@@ -94,6 +94,7 @@ BOOL CMainDlg::OnInitDialog()
 		{
 			continue;
 		}
+		// Metasequoia 4 でも内部コードは ANSI のままらしい。
 		obj->GetName(objName, MaxNameLength - 1);
 		const CString strObjName(objName);
 		const auto& addStringToCombo = [](CComboBox& combo, const CString& str)
