@@ -33,12 +33,5 @@
 /src/SyghMQUVMatrix/x64
 /src/SyghMQUVSelectUtil/Win32
 /src/SyghMQUVSelectUtil/x64
-/src/_mqsdk/MQ3DLib.cpp
-/src/_mqsdk/MQ3DLib.h
-/src/_mqsdk/MQBasePlugin.cpp
-/src/_mqsdk/MQBasePlugin.h
-/src/_mqsdk/MQInit.cpp
-/src/_mqsdk/MQPlugin.cpp
-/src/_mqsdk/MQPlugin.h
-/src/_mqsdk/MQSetting.cpp
-/src/_mqsdk/MQSetting.h
+/src/_mqsdk/*.cpp
+/src/_mqsdk/*.h
