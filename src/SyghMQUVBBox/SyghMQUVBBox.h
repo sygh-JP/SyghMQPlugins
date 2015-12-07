@@ -23,5 +23,5 @@ public:
 
 namespace MyPluginCoreFuncs
 {
-	extern bool FitBox(MQCDocument* doc, MQCoordinate min1, MQCoordinate max1, MQCoordinate min2, MQCoordinate max2);
+	extern bool FitUVBoundingBox(MQCDocument* doc, MQCoordinate min1, MQCoordinate max1, MQCoordinate min2, MQCoordinate max2);
 }

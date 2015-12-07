@@ -26,20 +26,20 @@ class SRTMatrixParam
 {
 	// MQCoordinate は怠惰なデフォルトコンストラクタを持つので、コンポジションする場合はきちんと初期化しておく。
 public:
-	MQCoordinate Cs = { 0, 0 };
-	MQCoordinate Cr = { 0, 0 };
-	MQCoordinate Scale = { 0, 0 };
-	MQCoordinate Transl = { 0, 0 };
+	MQCoordinate ScalingCenter = { 0, 0 };
+	MQCoordinate RotCenter = { 0, 0 };
+	MQCoordinate Scaling = { 0, 0 };
+	MQCoordinate Translation = { 0, 0 };
 	float RotAngleDegrees = 0;
 public:
 	SRTMatrixParam() {}
 public:
 	void InitializeByCenter(MQCoordinate center)
 	{
-		this->Cs = this->Cr = center;
+		this->ScalingCenter = this->RotCenter = center;
 		this->RotAngleDegrees = 0.0f;
-		this->Scale.u = this->Scale.v = 1.0f;
-		this->Transl.u = this->Transl.v = 0.0f;
+		this->Scaling.u = this->Scaling.v = 1.0f;
+		this->Translation.u = this->Translation.v = 0.0f;
 	}
 	void InitializeByMinMax(MQCoordinate minVal, MQCoordinate maxVal)
 	{

@@ -68,18 +68,18 @@ void CMainDlg::OnOK()
 
 	try
 	{
-		SRTMatrixParam m_matrixParam;
-		m_matrixParam.Cs.u = m_ddvScalingCenterU;
-		m_matrixParam.Cs.v = m_ddvScalingCenterV;
-		m_matrixParam.Scale.u = m_ddvScalingU;
-		m_matrixParam.Scale.v = m_ddvScalingV;
-		m_matrixParam.Cr.u = m_ddvRotCenterU;
-		m_matrixParam.Cr.v = m_ddvRotCenterV;
-		m_matrixParam.RotAngleDegrees = m_ddvRotAngleDegrees;
-		m_matrixParam.Transl.u = m_ddvTranslationU;
-		m_matrixParam.Transl.v = m_ddvTranslationV;
+		SRTMatrixParam matrixParam;
+		matrixParam.ScalingCenter.u = m_ddvScalingCenterU;
+		matrixParam.ScalingCenter.v = m_ddvScalingCenterV;
+		matrixParam.Scaling.u = m_ddvScalingU;
+		matrixParam.Scaling.v = m_ddvScalingV;
+		matrixParam.RotCenter.u = m_ddvRotCenterU;
+		matrixParam.RotCenter.v = m_ddvRotCenterV;
+		matrixParam.RotAngleDegrees = m_ddvRotAngleDegrees;
+		matrixParam.Translation.u = m_ddvTranslationU;
+		matrixParam.Translation.v = m_ddvTranslationV;
 
-		MyPluginCoreFuncs::ApplyUVSRTMatrix(m_pDocument, m_matrixParam);
+		MyPluginCoreFuncs::ApplyUVSRTMatrix(m_pDocument, matrixParam);
 	}
 	catch (const CString& err)
 	{
@@ -111,18 +111,18 @@ BOOL CMainDlg::OnInitDialog()
 		return true;
 	}
 
-	SRTMatrixParam m_matrixParam;
-	m_matrixParam.InitializeByMinMax(originalBBoxMin, originalBBoxMax);
+	SRTMatrixParam matrixParam;
+	matrixParam.InitializeByMinMax(originalBBoxMin, originalBBoxMax);
 
-	m_ddvScalingCenterU = m_matrixParam.Cs.u;
-	m_ddvScalingCenterV = m_matrixParam.Cs.v;
-	m_ddvScalingU = m_matrixParam.Scale.u;
-	m_ddvScalingV = m_matrixParam.Scale.v;
-	m_ddvRotCenterU = m_matrixParam.Cr.u;
-	m_ddvRotCenterV = m_matrixParam.Cr.v;
-	m_ddvRotAngleDegrees = m_matrixParam.RotAngleDegrees;
-	m_ddvTranslationU = m_matrixParam.Transl.u;
-	m_ddvTranslationV = m_matrixParam.Transl.v;
+	m_ddvScalingCenterU = matrixParam.ScalingCenter.u;
+	m_ddvScalingCenterV = matrixParam.ScalingCenter.v;
+	m_ddvScalingU = matrixParam.Scaling.u;
+	m_ddvScalingV = matrixParam.Scaling.v;
+	m_ddvRotCenterU = matrixParam.RotCenter.u;
+	m_ddvRotCenterV = matrixParam.RotCenter.v;
+	m_ddvRotAngleDegrees = matrixParam.RotAngleDegrees;
+	m_ddvTranslationU = matrixParam.Translation.u;
+	m_ddvTranslationV = matrixParam.Translation.v;
 
 	// DDValue を使ってダイアログ上の情報を更新。
 	this->UpdateData(false);
@@ -149,7 +149,7 @@ void CMainDlg::OnBnClickedButtonGetClipboard()
 	const auto paramArray = MyUtils::SplitStringIntoArray<float>(strTemp, MaxFieldsCount);
 	if (paramArray.size() != MaxFieldsCount)
 	{
-		AfxMessageBox(_T("クリップボードに 9 数値フィールドを含むテキストが格納されていません。"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("クリップボードに 9 個の数値フィールドを含むテキストが格納されていません。"), MB_OK | MB_ICONERROR);
 		return;
 	}
 

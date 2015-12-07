@@ -60,7 +60,7 @@ void CMainDlg::OnOK()
 	{
 		const MQCoordinate inputBBoxMin(m_ddvLeftTopU, m_ddvLeftTopV);
 		const MQCoordinate inputBBoxMax(m_ddvRightBottomU, m_ddvRightBottomV);
-		MyPluginCoreFuncs::FitBox(m_pDocument, m_originalBBoxMin, m_originalBBoxMax, inputBBoxMin, inputBBoxMax);
+		MyPluginCoreFuncs::FitUVBoundingBox(m_pDocument, m_originalBBoxMin, m_originalBBoxMax, inputBBoxMin, inputBBoxMax);
 	}
 	catch (const CString& err)
 	{
@@ -121,7 +121,7 @@ void CMainDlg::OnBnClickedButtonGetClipboard()
 	const auto paramArray = MyUtils::SplitStringIntoArray<float>(strTemp, MaxFieldsCount);
 	if (paramArray.size() != MaxFieldsCount)
 	{
-		AfxMessageBox(_T("クリップボードに 4 数値フィールドを含むテキストが格納されていません。"), MB_OK | MB_ICONERROR);
+		AfxMessageBox(_T("クリップボードに 4 個の数値フィールドを含むテキストが格納されていません。"), MB_OK | MB_ICONERROR);
 		return;
 	}
 

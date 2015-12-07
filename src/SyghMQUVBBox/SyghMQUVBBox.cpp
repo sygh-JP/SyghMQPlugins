@@ -168,38 +168,38 @@ MQPLUGIN_EXPORT BOOL MQModifySelect(int index, MQCDocument* doc)
 
 namespace
 {
-	// 拡縮率の計算
-	MQCoordinate CalcScalingRate(MQCoordinate Min1, MQCoordinate Max1, MQCoordinate Min2, MQCoordinate Max2)
+	// 拡縮率の計算。
+	MQCoordinate CalcScalingRate(MQCoordinate min1, MQCoordinate max1, MQCoordinate min2, MQCoordinate max2)
 	{
 		const float EPS = (1.0e-10f);
-		const MQCoordinate Diff1 = Max1 - Min1;
-		const MQCoordinate Diff2 = Max2 - Min2;
-		// ゼロ割防止。
+		const MQCoordinate diff1 = max1 - min1;
+		const MQCoordinate diff2 = max2 - min2;
+		// ゼロ割による発散防止。
 		// 分母の絶対値が十分小さい場合、拡縮はしない。
-		const float tempU = (fabs(Diff1.u) < EPS) ? (1.0f) : (Diff2.u / Diff1.u);
-		const float tempV = (fabs(Diff1.v) < EPS) ? (1.0f) : (Diff2.v / Diff1.v);
+		const float tempU = (fabs(diff1.u) < EPS) ? (1.0f) : (diff2.u / diff1.u);
+		const float tempV = (fabs(diff1.v) < EPS) ? (1.0f) : (diff2.v / diff1.v);
 		return MQCoordinate(tempU, tempV);
 	}
 
-	// 各頂点 UV に対する処理
-	inline MQCoordinate ScaleAndTranslate(MQCoordinate TexCoord, MQCoordinate Scale, MQCoordinate Min1, MQCoordinate Min2)
+	// 各頂点 UV に対する処理。
+	inline MQCoordinate ScaleAndTranslate(MQCoordinate texCoord, MQCoordinate scale, MQCoordinate min1, MQCoordinate min2)
 	{
-		return Scale * (TexCoord - Min1) + Min2;
+		return scale * (texCoord - min1) + min2;
 	}
 
-	bool FitBoundingBoxImpl(MQCDocument* doc, MQCoordinate Scale, MQCoordinate Min1, MQCoordinate Min2)
+	bool FitBoundingBoxImpl(MQCDocument* doc, MQCoordinate scale, MQCoordinate min1, MQCoordinate min2)
 	{
 		return MyMQUtils::CommonUVScanLoopImpl<true>(doc,
 			[&](MQCoordinate& uv)
 		{
-			uv = ScaleAndTranslate(uv, Scale, Min1, Min2);
+			uv = ScaleAndTranslate(uv, scale, min1, min2);
 		});
 	}
 }
 
 namespace MyPluginCoreFuncs
 {
-	bool FitBox(MQCDocument* doc, MQCoordinate min1, MQCoordinate max1, MQCoordinate min2, MQCoordinate max2)
+	bool FitUVBoundingBox(MQCDocument* doc, MQCoordinate min1, MQCoordinate max1, MQCoordinate min2, MQCoordinate max2)
 	{
 		const MQCoordinate scale = CalcScalingRate(min1, max1, min2, max2);
 		return FitBoundingBoxImpl(doc, scale, min1, min2);

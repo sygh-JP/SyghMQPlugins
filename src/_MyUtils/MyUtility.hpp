@@ -21,10 +21,11 @@ namespace MyUtils
 		b = c;
 	}
 
-	template<class Type> inline const Type& Clamp(const Type& a, const Type& Min, const Type& Max)
+	template<class Type> inline const Type& Clamp(const Type& a, const Type& minVal, const Type& maxVal)
 	{
-		if (a < Min) return Min;
-		if (a > Max) return Max;
+		// NaN は考慮しない。
+		if (a < minVal) return minVal;
+		if (a > maxVal) return maxVal;
 		return a;
 	}
 

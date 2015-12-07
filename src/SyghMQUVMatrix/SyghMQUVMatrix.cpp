@@ -167,16 +167,15 @@ MQPLUGIN_EXPORT BOOL MQModifySelect(int index, MQCDocument* doc)
 
 namespace
 {
-	inline void CalcCoefs(MQCoordinate& delta, float& cost, float& sint, const SRTMatrixParam& Param)
+	inline void CalcCoefs(MQCoordinate& delta, float& cost, float& sint, const SRTMatrixParam& inParam)
 	{
-		const float trad = RAD(Param.RotAngleDegrees);
+		const float trad = RAD(inParam.RotAngleDegrees);
 		cost = cos(trad);
 		sint = sin(trad);
 		// 古いバージョンの SDK では単項のマイナス演算子がオーバーロードされていなかった。
-		//const MQCoordinate ab = -1.0f * Param.Scale * Param.Cs + Param.Cs -1.0f * Param.Cr;
-		const MQCoordinate ab = -Param.Scale * Param.Cs + Param.Cs - Param.Cr;
-		delta.u = ab.u * cost - ab.v * sint + Param.Cr.u + Param.Transl.u;
-		delta.v = ab.u * sint + ab.v * cost + Param.Cr.v + Param.Transl.v;
+		const MQCoordinate ab = -inParam.Scaling * inParam.ScalingCenter + inParam.ScalingCenter - inParam.RotCenter;
+		delta.u = ab.u * cost - ab.v * sint + inParam.RotCenter.u + inParam.Translation.u;
+		delta.v = ab.u * sint + ab.v * cost + inParam.RotCenter.v + inParam.Translation.v;
 	}
 }
 
@@ -192,8 +191,8 @@ namespace MyPluginCoreFuncs
 		return MyMQUtils::CommonUVScanLoopImpl<true>(doc,
 			[&](MQCoordinate& uv)
 		{
-			const float tempU = uv.u * inParam.Scale.u * cost - uv.v * inParam.Scale.v * sint + delta.u;
-			const float tempV = uv.u * inParam.Scale.u * sint + uv.v * inParam.Scale.v * cost + delta.v;
+			const float tempU = uv.u * inParam.Scaling.u * cost - uv.v * inParam.Scaling.v * sint + delta.u;
+			const float tempV = uv.u * inParam.Scaling.u * sint + uv.v * inParam.Scaling.v * cost + delta.v;
 			uv = MQCoordinate(tempU, tempV);
 		});
 	}
