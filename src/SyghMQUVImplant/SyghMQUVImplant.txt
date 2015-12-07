@@ -23,7 +23,9 @@ http://sygh.hatenadiary.jp/
 プラグインソースコード公式管理サイト：
 https://github.com/sygh-JP/SyghMQPlugins
 
-※ KB975929 が適用されている Windows Vista であれば動作するかもしれませんが、
+※ダイアログ UI に Meiryo UI フォントを必要とするため、またビルドに Visual C++ 2013 と
+Windows SDK 8.1 を使用しているため、サポートは Windows 7 以降となっています。
+KB975929 が適用されている Windows Vista であれば動作するかもしれませんが、
 Vista 以前は動作保証外となります。
 https://www.microsoft.com/ja-jp/download/details.aspx?id=5572
 https://www.microsoft.com/ja-jp/download/details.aspx?id=24941
@@ -61,7 +63,7 @@ Metasequoia をインストールしたフォルダーの下の
 
 
 【多角形面について】
-Metasequoia はバージョン 4 にて五角形を超える多角形面に対応しましたが、
+Metasequoia はバージョン 4 にて五角形以上の多角形面に対応しましたが、
 旧バージョンの SDK を使って作成されたプラグインを多角形面に対して実行しようとすると、
 「古いプラグインを実行するには多角形を分割する必要があります。
 多角形を分割してプラグイン処理を実行しますか？」
