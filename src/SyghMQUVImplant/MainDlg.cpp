@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "SyghMQUVImplant.h"
 #include "MainDlg.h"
+#include "../_MyUtils/MyMQUtils.hpp"
 
 
 // CMainDlg ダイアログ
@@ -69,15 +70,15 @@ BOOL CMainDlg::OnInitDialog()
 
 	ASSERT(this->m_pDocument != nullptr);
 
-	const int objCount = m_pDocument->GetObjectCount();
+	const int objCount = MyMQUtils::GetAliveObjectsCount(m_pDocument);
 	if (objCount <= 1)
 	{
 		AfxMessageBox(_T("ドキュメント内のオブジェクト数が 1 以下です。UV 移植できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();
 		return true;
 	}
-	const int currentMatIndex = m_pDocument->GetCurrentMaterialIndex();
-	if (currentMatIndex == -1)
+	const int matCount = MyMQUtils::GetAliveMaterialsCount(m_pDocument);
+	if (matCount <= 0)
 	{
 		AfxMessageBox(_T("ドキュメント内にマテリアルが存在しません。UV 移植できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();

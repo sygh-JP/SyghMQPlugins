@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "SyghMQUV2SVG.h"
 #include "MainDlg.h"
+#include "../_MyUtils/MyMQUtils.hpp"
 
 
 // CMainDlg ダイアログ
@@ -220,22 +221,15 @@ BOOL CMainDlg::OnInitDialog()
 
 	ASSERT(this->m_pDocument != nullptr);
 
-	const int objCount = m_pDocument->GetObjectCount();
+	const int objCount = MyMQUtils::GetAliveObjectsCount(m_pDocument);
 	if (objCount <= 0)
 	{
 		AfxMessageBox(_T("ドキュメント内のオブジェクト数が 0 以下です。UV 出力できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();
 		return true;
 	}
-	// Metasequoia 4.5.3 の MQCDocument::GetMaterialCount() はバグがあるらしい？
-	// マテリアルが1つもない状態でも、1を返す。
-	// 代わりにカレントマテリアルの有無でチェックするしかなさそう。
-	// 本来は「カレントマテリアルが無効＝マテリアルが存在しない」とはかぎらないが、
-	// Metasequoia では一応それが成り立つ仕様になっているはず。
-	//const int matCount = m_pDocument->GetMaterialCount();
-	//AfxMessageBox(std::to_wstring(matCount).c_str());
-	const int currentMatIndex = m_pDocument->GetCurrentMaterialIndex();
-	if (currentMatIndex == -1)
+	const int matCount = MyMQUtils::GetAliveMaterialsCount(m_pDocument);
+	if (matCount <= 0)
 	{
 		AfxMessageBox(_T("ドキュメント内にマテリアルが存在しません。UV 出力できません。"), MB_OK | MB_ICONWARNING);
 		this->OnCancel();

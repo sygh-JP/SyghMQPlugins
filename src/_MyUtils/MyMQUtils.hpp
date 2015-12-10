@@ -33,6 +33,39 @@ namespace MyMQUtils
 		}
 	}
 
+	inline int GetAliveObjectsCount(MQCDocument* doc)
+	{
+		const int totalCount = doc->GetObjectCount();
+		int aliveCount = 0;
+		for (int i = 0; i < totalCount; ++i)
+		{
+			auto* obj = doc->GetObject(i);
+			if (obj != nullptr)
+			{
+				++aliveCount;
+			}
+		}
+		return aliveCount;
+	}
+
+	inline int GetAliveMaterialsCount(MQCDocument* doc)
+	{
+		// GetMaterialCount() は単に配列のサイズを返すだけらしい。
+		// マテリアルを追加した後、マテリアルをすべて削除した状態でも、Compaction が実行されるまで非ゼロが返ってくる。
+		// 有効なマテリアルの数を調べるには、全要素に対して NULL チェックが必要。
+		const int totalCount = doc->GetMaterialCount();
+		int aliveCount = 0;
+		for (int i = 0; i < totalCount; ++i)
+		{
+			auto* mat = doc->GetMaterial(i);
+			if (mat != nullptr)
+			{
+				++aliveCount;
+			}
+		}
+		return aliveCount;
+	}
+
 	//! @brief  カレントオブジェクトかつカレントマテリアルに対して、UV 選択されている頂点に対する共通ループ操作を定義する。<br>
 	//! @return  ループの最後まで到達し、スキャンが成功したか否か。<br>
 	//! @tparam  writebackUV  UV 座標の変更（書き戻し）を行なうか否か。<br>
@@ -44,6 +77,8 @@ namespace MyMQUtils
 		if (currentMatIndex == -1)
 		{
 			// カレントマテリアルが無効＝マテリアルがひとつも無い。すなわちすべてが未着色面。
+			// 本来は「カレントマテリアルが無効＝マテリアルが存在しない」とはかぎらないが、
+			// Metasequoia では一応それが成り立つ仕様になっているはず。
 			return false;
 		}
 		auto* obj = doc->GetObject(currentObjIndex);
